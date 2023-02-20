@@ -1,24 +1,12 @@
-# README
+# Game of life on Rails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+This web app is an assignment for the game of life exercise.
 
-Things you may want to cover:
+The game of life exercise is modeled as two resources, a Game and
+the Generations through which the game's board evolves.
 
-* Ruby version
+As the game can go on forever and requires time/memory to simulate
+one generation there is the opportunity to DOS ourselves or worse.
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+This means that once the user supplied an initial board configuration
+the same user cannot also ask to simulate the game "forever" unattended.

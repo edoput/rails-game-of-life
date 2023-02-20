@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
-  root "articles#index"
+  root "games#index"
+
+  resources :games do
+    resources :generations do
+      get 'next', to: 'generations#next'
+      get 'previous', to: 'generations#previous'
+    end
+  end
   
   resources :articles do
     resources :comments

@@ -1,0 +1,11 @@
+<!-- TODO(edoput) nicely render the board here -->
+<pre>
+Generation <%= @generation.step %>:
+<!-- TODO(edoput) missing size here -->  
+<%= @generation.board %>
+</pre>
+
+<% unless @generation.initial? %>
+<%= link_to "Back", game_generation_previous_path(@game, @generation) %>
+<% end %>
+<%= link_to "Next", game_generation_next_path(@game, @generation) %>
