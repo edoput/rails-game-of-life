@@ -8,11 +8,15 @@ class Generation < ApplicationRecord
   validates :board, presence: true # TODO(edoput) length == width * height
 
   def next_generation
-    Generation.find(:step, self.step+1)
+    self.game.generations.find_by(step: self.step+1)
+  end
+
+  def next_available?
+    self.game.generations.find_by(step: self.step+1)
   end
 
   def previous_generation
-    Generation.find(:step, self.step-1)
+    self.game.generations.find_by(step: self.step-1)
   end
   
   # TODO(edoput) initial? predicate

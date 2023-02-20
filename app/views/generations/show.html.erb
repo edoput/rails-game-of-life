@@ -1,3 +1,12 @@
+
+<nav>
+  <%= link_to "All games", root_path %>
+  <%= link_to "All game generations", game_path(@game) %>
+</nav>
+
+<% if @generation.initial %>
+  <bold>Initial generation</bold>
+<% end %>
 <!-- TODO(edoput) nicely render the board here -->
 <pre>
 Generation <%= @generation.step %>:
@@ -6,6 +15,7 @@ Generation <%= @generation.step %>:
 </pre>
 
 <% unless @generation.initial? %>
-<%= link_to "Back", game_generation_previous_path(@game, @generation) %>
+  <%= link_to "Back", game_generation_previous_path(@game, @generation) %>
 <% end %>
+  
 <%= link_to "Next", game_generation_next_path(@game, @generation) %>

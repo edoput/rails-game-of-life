@@ -1,3 +1,7 @@
+<nav>
+  <%= link_to "All games", root_path %>
+</nav>
+
 <h2><%= @game.name %></h2>
 
 <% if @game.started? %>
@@ -5,8 +9,8 @@
 
 There are <%= @game.generations.count %> generations available.
 
-<p>Game starts <%= link_to "here", game_generation_path(@initial_generation) %>.</p>
-<p>Last seen <%= link_to "here", game_generation_path(@current_generation) %>.</p>
+<p>Game starts <%= link_to "here", game_generation_path(@game, @initial_generation) %>.</p>
+<p>Last seen <%= link_to "here", game_generation_path(@game, @current_generation) %>.</p>
 								
 <!-- TODO(edoput) show paginated list of generations -->
 <% else %>

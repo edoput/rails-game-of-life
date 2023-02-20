@@ -2,7 +2,9 @@ class GenerationsController < ApplicationController
   def show
     @game = Game.find(params[:game_id])
     @generation = @game.generations.find(params[:id])
-    # TODO(edoput) spawn async task for creating next step of board
+    unless @generation.next_available?
+      StepJob.perform_later @game
+    end
   end
 
   def create
@@ -23,13 +25,13 @@ class GenerationsController < ApplicationController
   def next
     @game = Game.find(params[:game_id])
     @generation = @game.generations.find(params[:generation_id])
-    redirect_to @generation.next_generation
+    redirect_to game_generation_path(@game, @generation.next_generation)
   end
 
   def previous
     @game = Game.find(params[:game_id])
     @generation = @game.generations.find(params[:generation_id])
-    redirect_to @generation.previous_generation
+    redirect_to game_generation_path(@game, @generation.previous_generation)
   end
 
   private
