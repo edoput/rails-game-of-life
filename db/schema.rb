@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_19_150119) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_20_141321) do
   create_table "articles", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -37,7 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_19_150119) do
 
   create_table "generations", force: :cascade do |t|
     t.integer "game_id", null: false
-    t.boolean "initial"
+    t.boolean "initial", default: false
     t.integer "step"
     t.text "board"
     t.datetime "created_at", null: false
