@@ -1,17 +1,17 @@
 require 'matrix'
 
 module Simulation
-  def read_generation(i)
+  def self.read_generation(i)
     _, gen, *_ = i.readline.split
     Integer(gen[0...-1], 10)
   end
 
-  def read_dimensions(i)
+  def self.read_dimensions(i)
     width, height, *_ = i.readline.split
     return Integer(width, 10), Integer(height, 10)
   end
 
-  def read_board(i, w,  h)
+  def self.read_board(i, w,  h)
     i.read((w+1) * h - 1) # read h lines, each w chars wide + line feed
   end
   

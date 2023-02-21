@@ -1,3 +1,5 @@
+require 'simulation'
+
 class GenerationsController < ApplicationController
   def show
     @game = Game.find(params[:game_id])
@@ -12,18 +14,24 @@ class GenerationsController < ApplicationController
     if @game.started?
       redirect_to @game
     end
-    #TODO(edoput) this should be a block for resource cleanup
-    #TODO(edoput) this should also give back validation at the "parser" level
-    input = params[:generation][:initial_board].open
-    initial_step = read_generation(input)
-    width, height = read_dimensions(input)
 
-    @game.width = width
-    @game.height = height
-    board = read_board(input, width, height)
-    @game.generations.create(initial: true, step: initial_step, board: board)
-    input.close()
-    redirect_to @game
+    input = params[:generation][:initial_board].open
+    begin
+      initial_step = Simulation.read_generation(input)
+      width, height = Simulation.read_dimensions(input)
+      @game.width = width
+      @game.height = height
+      @game.save
+      board = Simulation.read_board(input, width, height)
+      @game.generations.create(initial: true, step: initial_step, board: board)
+      redirect_to @game
+    rescue => exception
+      logger.warn exception.message
+      #TODO(edoput) this should also give back validation at the "parser" level
+      redirect_to @game
+    ensure
+      input.close()
+    end
   end
 
   def next
@@ -41,21 +49,5 @@ class GenerationsController < ApplicationController
   private
   def generation_params
     params.require(:game).permit(:initial_board)
-  end
-
-  # TODO(edoput) move parsing of file somewhere else?
-
-  def read_generation(i)
-    _, gen, *_ = i.readline.split
-    return Integer(gen[0...-1])
-  end
-
-  def read_dimensions(i)
-    width, height, *_ = i.readline.split
-    return Integer(width), Integer(height)
-  end
-
-  def read_board(i, w,  h)
-    i.read((w+1) * h - 1) # read h lines, each w chars wide + line feed
   end
 end
