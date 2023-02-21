@@ -15,8 +15,8 @@ class GenerationsController < ApplicationController
     input = params[:generation][:initial_board].open()
     initial_step = read_generation(input)
     #TODO(edoput) put width and height somewhere
-    _, _ = read_dimensions(input)
-    board = read_board(input)
+    width, height = read_dimensions(input)
+    board = read_board(input, width, height)
     @game.generations.create(initial: true, step: initial_step, board: board)
     input.close()
     redirect_to @game
@@ -51,7 +51,7 @@ class GenerationsController < ApplicationController
     return Integer(width), Integer(height)
   end
 
-  def read_board(i)
-    i.readlines.map{|l| l.rstrip.chars }
+  def read_board(i, w,  h)
+    i.read((w+1) * h - 1) # read h lines, each w chars wide + line feed
   end
 end
