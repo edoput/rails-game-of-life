@@ -12,10 +12,14 @@ class GenerationsController < ApplicationController
     if @game.started?
       redirect_to @game
     end
-    input = params[:generation][:initial_board].open()
+    #TODO(edoput) this should be a block for resource cleanup
+    #TODO(edoput) this should also give back validation at the "parser" level
+    input = params[:generation][:initial_board].open
     initial_step = read_generation(input)
-    #TODO(edoput) put width and height somewhere
     width, height = read_dimensions(input)
+
+    @game.width = width
+    @game.height = height
     board = read_board(input, width, height)
     @game.generations.create(initial: true, step: initial_step, board: board)
     input.close()
