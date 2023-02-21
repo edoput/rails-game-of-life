@@ -12,7 +12,7 @@ class Generation < ApplicationRecord
   end
 
   def next_available?
-    self.game.generations.find_by(step: self.step+1)
+    self.game.generations.exists?(step: self.step+1)
   end
 
   def previous_generation

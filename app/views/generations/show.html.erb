@@ -4,9 +4,6 @@
   <%= link_to "All game generations", game_path(@game) %>
 </nav>
 
-<% if @generation.initial %>
-  <bold>Initial generation</bold>
-<% end %>
 <!-- TODO(edoput) nicely render the board here -->
 <pre>
 Generation <%= @generation.step %>:
