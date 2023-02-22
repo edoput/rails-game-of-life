@@ -15,19 +15,25 @@ class GenerationsController < ApplicationController
       redirect_to @game
     end
 
-    input = params[:generation][:initial_board].open
+
     begin
+      input = params[:generation][:initial_board].open
       initial_step = Simulation.read_generation(input)
       width, height = Simulation.read_dimensions(input)
       @game.width = width
       @game.height = height
       @game.save
-      board = Simulation.read_board(input, width, height)
-      @game.generations.create(initial: true, step: initial_step, board: board)
+      s = Simulation.read_board(input, width, height)
+      board = Simulation.from_string(s)
+      if board.row_count != height or board.column_count != width then
+        redirect_to @game
+      end
+      @game.generations.create(initial: true, step: initial_step, board: s)
       redirect_to @game
-    rescue => exception
-      logger.warn exception.message
-      #TODO(edoput) this should also give back validation at the "parser" level
+    rescue ActiveRecord::RecordInvalid => invalid
+      #TODO(edoput) this is just for the game validation
+      redirect_to @game
+    rescue ArgumentError
       redirect_to @game
     ensure
       input.close()

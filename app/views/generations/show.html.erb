@@ -4,10 +4,9 @@
   <%= link_to "All game generations", game_path(@game) %>
 </nav>
 
-<!-- TODO(edoput) nicely render the board here -->
 <pre>
 Generation <%= @generation.step %>:
-<!-- TODO(edoput) missing size here -->  
+<%= @game.height %> <%= @game.width %>  
 <%= @generation.board %>
 </pre>
 

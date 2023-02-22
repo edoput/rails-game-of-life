@@ -66,6 +66,12 @@ module Simulation
     end
   end
 
+  def self.from_string(s)
+    StringIO.open(s) do |i|
+      Matrix[*i.readlines.map{|l| l.rstrip.chars}]
+    end
+  end
+  p
   def self.board_string(board)
     io = StringIO.new
     for i in 0..board.row_count-1 do
