@@ -9,12 +9,16 @@ class GenerationsController < ApplicationController
     end
   end
 
+  def new
+    @game = Game.find(params[:game_id])
+    render :new
+  end
+
   def create
     @game = Game.find(params[:game_id])
     if @game.started?
       redirect_to @game
     end
-
 
     begin
       input = params[:generation][:initial_board].open
@@ -22,19 +26,16 @@ class GenerationsController < ApplicationController
       width, height = Simulation.read_dimensions(input)
       @game.width = width
       @game.height = height
-      @game.save
-      s = Simulation.read_board(input, width, height)
-      board = Simulation.from_string(s)
-      if board.row_count != height or board.column_count != width then
-        redirect_to @game
+      if not @game.save then
+        render :new, status: :unprocessable_entity
+        return
       end
+      s = Simulation.read_board(input, width, height)
       @game.generations.create(initial: true, step: initial_step, board: s)
       redirect_to @game
-    rescue ActiveRecord::RecordInvalid => invalid
-      #TODO(edoput) this is just for the game validation
-      redirect_to @game
     rescue ArgumentError
-      redirect_to @game
+      # TODO(edoput) parse error in read_generation or read_dimensions
+      render :new, status: :unprocessable_entity
     ensure
       input.close()
     end

@@ -66,6 +66,10 @@ module Simulation
     end
   end
 
+  def self.valid_board?(board)
+    board.each.all? {|c| [DEAD, ALIVE, "\n"].include? c}
+  end
+
   def self.from_string(s)
     StringIO.open(s) do |i|
       Matrix[*i.readlines.map{|l| l.rstrip.chars}]

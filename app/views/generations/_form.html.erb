@@ -1,0 +1,14 @@
+<%= form_with model: [game, game.generations.build] do |form| %>
+  <%= form.label :file %><br>
+  <%= form.file_field :initial_board %>
+  
+  <% game.errors.full_messages_for(:width).each do |message| %>
+  <div><%= message %></div>
+  <% end %>
+  
+  <% game.errors.full_messages_for(:height).each do |message| %>
+  <div><%= message %></div>
+  <% end %>
+
+  <%= form.submit "Start game" %>
+<% end %>

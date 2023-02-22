@@ -14,11 +14,6 @@ There are <%= @game.generations.count %> generations available.
 								
 <!-- TODO(edoput) show paginated list of generations -->
 <% else %>
-  <p>Upload a file to start the game</p>
-  <%= form_with model: [@game, @game.generations.build ] do |form| %>
-    <%= form.label :file %><br>
-    <%= form.file_field :initial_board %>
-    <%= form.submit "Start game" %>
-  <% end %>
+<%= link_to "Upload initial board", new_game_generation_path(@game, @generation) %>
 <% end %>
 
