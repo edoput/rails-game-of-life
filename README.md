@@ -10,3 +10,9 @@ one generation there is the opportunity to DOS ourselves or worse.
 
 This means that once the user supplied an initial board configuration
 the same user cannot also ask to simulate the game "forever" unattended.
+
+
+# TODO
+
+- authentication through devise
+- render validation errors for malformed board (wrong size, wrong symbols)
