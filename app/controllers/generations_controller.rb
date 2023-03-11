@@ -18,23 +18,42 @@ class GenerationsController < ApplicationController
     @game = Game.find(params[:game_id])
     if @game.started?
       redirect_to @game
+      return
     end
 
     begin
       input = params[:generation][:initial_board].open
-      initial_step = Simulation.read_generation(input)
-      width, height = Simulation.read_dimensions(input)
+      begin 
+        puts "parsing generation header"
+        initial_step = Simulation.read_generation(input)
+      rescue ArgumentError
+        @game.errors.add :parsing, "Cannot parse generation header"
+        render :new, status: :unprocessable_entity
+        return
+      end
+
+      begin 
+        puts "parsing dimensions header"
+        height, width = Simulation.read_dimensions(input)
+      rescue ArgumentError
+        @game.errors.add :parsing, "Cannot parse dimensions header"
+        render :new, status: :unprocessable_entity
+        return
+      end
+
       @game.width = width
       @game.height = height
       if not @game.save then
         render :new, status: :unprocessable_entity
         return
       end
+
+      puts "parsing board"
       s = Simulation.read_board(input, width, height)
-      @game.generations.create(initial: true, step: initial_step, board: s)
+      @game.generations.create!(initial: true, step: initial_step, board: s)
       redirect_to @game
-    rescue ArgumentError
-      # TODO(edoput) parse error in read_generation or read_dimensions
+    rescue ActiveRecord::RecordInvalid => invalid
+      @game.errors.merge! invalid.record.errors
       render :new, status: :unprocessable_entity
     ensure
       input.close()
