@@ -20,5 +20,7 @@ module Life
     # config.eager_load_paths << Rails.root.join("extras")
 
     config.active_job.queue_adapter = :async
+    config.hosts << "life.app.edoput.it"
+    config.hosts << "life.internal"
   end
 end
